@@ -46,3 +46,6 @@ resource "aws_instance" "exercise_0030" {
 # Output the public IP address of the exercise_0030 instance.
 # Read the docs at https://www.terraform.io/docs/providers/aws/r/instance.html#attributes-reference
 # to see what attribute you are going to use to look up
+output instance_public_ip {
+  value = aws_instance.exercise_0030.public_ip
+}
