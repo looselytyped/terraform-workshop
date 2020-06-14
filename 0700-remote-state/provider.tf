@@ -1,5 +1,7 @@
 provider "aws" {
-  region = "us-east-1"
+  access_key = "YOUR_AWS_KEY_ID_HERE"
+  secret_key = "YOUR_SECRET_ACCESS_KEY_HERE"
+  region     = "us-east-1"
 }
 
 resource "aws_s3_bucket" "my_terraform_state" {
