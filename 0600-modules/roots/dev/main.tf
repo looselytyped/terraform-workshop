@@ -1,33 +1,17 @@
-resource "aws_vpc" "terraform_dev" {
-  cidr_block = "10.0.0.0/16"
+module dev {
+  source = "../../modules"
+
+  vpc_name = "terraform_dev"
+
+  subnet_name = "main"
+  subnet_zone = "us-east-1a"
+  ec2_ami     = "ami-00464cdaf53314d9f"
+  ec2_size    = "t2.micro"
+  ec2_count   = 1
 
   tags = {
-    Name        = "terraform_dev"
-    Terraform   = true
-    Environment = "dev"
+    Module = true
   }
 }
 
-resource "aws_subnet" "main" {
-  vpc_id            = aws_vpc.terraform_dev.id
-  cidr_block        = "10.0.1.0/24"
-  availability_zone = "us-east-1a"
-
-  tags = {
-    Name      = "main"
-    Terraform = true
-  }
-}
-
-resource "aws_instance" "exercise_0060" {
-  ami           = "ami-00464cdaf53314d9f"
-  instance_type = "t2.micro"
-  subnet_id     = aws_subnet.main.id
-  count         = 1
-
-  tags = {
-    Name      = "exercise_0060.${count.index}"
-    Terraform = true
-  }
-}
 
