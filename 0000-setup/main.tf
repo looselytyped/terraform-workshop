@@ -1,6 +1,14 @@
+terraform {
+  required_version = ">= 0.13"
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 3.0"
+    }
+  }
+}
+
 provider "aws" {
-  access_key = "INSERT_AWS_KEY"
-  secret_key = "INSERT_AWS_SECRET"
   region     = "us-east-1"
 }
 

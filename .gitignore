@@ -3,6 +3,7 @@ creds/*
 .terraform
 .idea
 .vscode
+.terraform.lock.hcl
 
 # .tfstate files
 *.tfstate
