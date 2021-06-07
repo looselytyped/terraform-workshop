@@ -29,6 +29,12 @@ If you wish to keep a copy around, I highly recommend you fork this, and `git pu
 
 ### AWS Account Setup
 
+**I HIGHLY recommend NOT using your company (assuming you have one) account credentials for this workshop**.
+If you do not have a personal AWS account see below on how to set it up.
+
+Secondly, if you already have an AWS account, then **please make sure you have a Default VPC**.
+If you do not have one, see [this](https://docs.aws.amazon.com/vpc/latest/userguide/default-vpc.html#create-default-vpc) on how to create one.
+
 - If you **don't** already have an AWS account, head over to https://aws.amazon.com/ and create an account
   - **NOTE** — This account will have `admin` privileges, and you **do not want** to use this on a day-to-day basis! Store these credentials securely.
   - Please look over [Security Best Practices in IAM](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html) and make sure you are following best practices here (Be sure to set up MFA as well)
