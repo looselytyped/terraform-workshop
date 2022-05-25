@@ -10,7 +10,7 @@ data "aws_vpc" default_vpc {
 # TODO
 # Look up a data source named "latest_ubuntu"
 #
-# - Terraform docs — https://www.terraform.io/docs/providers/aws/d/ami.html
+# - Terraform docs — https://www.terraform.io/docs/providers/aws/d/ami
 # - See https://letslearndevops.com/2018/08/23/terraform-get-latest-centos-ami/ for syntax
 # - Go to https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#LaunchInstanceWizard:
 #   - Click on "Community AMIs"
