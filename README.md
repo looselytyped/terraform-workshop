@@ -100,15 +100,16 @@ localstack-main  |
 localstack-main  | Ready.
 ```
 
-In another terminal, navigate, again, to the location where you cloned this repository:
+**In another terminal**, navigate, again, to the location where you cloned this repository:
 
 ```bash
 # initialize terraform
 terraform init
 # see if terraform can perform it's duties
-terraform plan
-terraform apply
-# terraform will ask if you are sure. Type `yes`
+terraform apply -auto-approve
+
+# if all goes well, you should something like
+Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 ```
 
 If all that works, you are golden.
@@ -119,3 +120,7 @@ Go back to the first terminal
 # Clean up afterwards
 docker compose down -v
 ```
+
+Woot!
+You are all set.
+See you soon.
