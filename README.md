@@ -27,52 +27,95 @@ If you wish to keep a copy around, I highly recommend you fork this, and `git pu
 
 ## Setup
 
-### AWS Account Setup
+While this repository is a tutorial aimed at teaching Terraform, AWS setup can be arduous, and non-deterministic across audiences, especially if anyone chooses to use their _organizational_ credentials (Hello IAM!) and setup.
 
-- If you **don't** already have an AWS account, head over to https://aws.amazon.com/ and create an account
-  - **NOTE** — This account will have `admin` privileges, and you **do not want** to use this on a day-to-day basis! Store these credentials securely.
-  - Please look over [Security Best Practices in IAM](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html) and make sure you are following best practices here (Be sure to set up MFA as well)
-- Once you have done that (or if you already have an `admin` account), then you will need to create a special user that you will use for this workshop.
-- Log into the AWS Console using your `admin` credentials and follow the steps [here](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users_create.html#id_users_create_console)
-  - **Be sure** to check the `Programmatic access` and `AWS Management Console access` boxes on the first screen
-  - *For Step No.6* — Use the `Attach existing policies directly` tab and search for `AdministratorAccess` — Use that
-  - (Optional) I generally `Tag` this user with something like Key = `bot-user`,  Value = `true`
-- On the `Success` page *capture*
-  - `User`
-  - `Access key ID`
-  - `Secret access key`
-  - `Password`
-  - AWS Management Console access URL (Looks something like https://641995674308.signin.aws.amazon.com/console)
-  - Follow the AWS Management Console access URL and login — It will ask you to change your password. Do that.
-  - Use your password manager, or wherever you store credentials, and tuck the `User`, `Access key ID`, `Secret access key` and `Password` away
+To avoid this, this tutorial uses the absolutely fantastic [LocalStack](https://www.localstack.cloud/) project to emulate the AWS API locally.
+Not only does this make it easier to set up for the workshop, it a zero-cost solution for attendees, and eliminates the risk that they accidentally leave resources running in the cloud.
 
-<span style="color: #ec7211">**Once again, save ALL credentials SAFELY!**</span>
+It also makes the setup trivial.
+Please see the following sections:
 
-I **cannot** _emphasize_ this enough! Both the `admin` and the newly created user have the ability to create infrastructure on your behalf.
-Treat these *with care*!
+## Installation
 
-### Install Terraform
+You will need the following installed
 
-- Follow the steps [here](https://learn.hashicorp.com/terraform/getting-started/install.html)
+- [Terraform](https://learn.hashicorp.com/terraform/getting-started/install.html)
+- [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+- [Docker](https://www.docker.com/get-started/)
+- A good text editor.
+  I highly recommend [VS Code](https://code.visualstudio.com/).
+- Clone this repository
 
-### Clone this repository
+## Set up
 
-- Go to the location where you cloned this repository
-- Modify `0000-setup/main.tf` and modify the `provider` block with your `Access key ID` and `Secret access key` like so
+### Create a specific profile for LocalStack
 
+1. Open a terminal window
+2. Run the following command:
+    ```bash
+    aws configure --profile localstack
+    ```
+3. Enter the following details for the `localstack` profile:
+   - AWS Access Key ID: Enter `test`
+   - AWS Secret Access Key: Enter `test`
+   - Default region name: Enter `us-east-1`
+   - Default output format: Enter `json`
+
+4. The AWS CLI will create a new profile named `localstack` in the AWS credentials file (located at `~/.aws/credentials` on Linux/Mac or `%USERPROFILE%\.aws\credentials` on Windows) as well as storing your profile preferences in `~/.aws/config`.
+
+    **This is VERY IMPORTANT**.
+    Edit the `localstack` profile in `~/.aws/config`, and the add the following line at the bottom of the `localstack` profile:
+
+    ```ini
+    [profile localstack]
+    region=us-east-1
+    output=json
+    endpoint_url = http://localhost:4566 # <- ADD THIS LINE
+    ```
+5. Run the following:
+
+    ```bash
+    docker pull ubuntu:24.04
+    docker pull ubuntu:23.10
+    docker tag ubuntu:24.04 localstack-ec2/ubuntu-24-04-ami:ami-edbfe74c41f8
+    docker tag ubuntu:23.10 localstack-ec2/ubuntu-23-10-ami:ami-77081d4f1e72
+    ```
+
+
+## Testing your setup
+
+In the directory where you cloned this repository:
+
+```bash
+# cd /path/to/terraform-workshop
+❯ docker compose up --build
+# You should see ...
+[+] Running 1/0
+ ✔ Container localstack-main  Created 0.0s
+Attaching to localstack-main
+localstack-main  |
+localstack-main  | LocalStack version: 3.7.1
+localstack-main  | LocalStack build git hash: d4f2409a7
+localstack-main  |
+localstack-main  | Ready.
 ```
-# Be sure to use "double-quotes" around your keys
-provider "aws" {
-  access_key = "YOUR_AWS_KEY_ID_HERE"
-  secret_key = "YOUR_SECRET_ACCESS_KEY_HERE"
-  region     = "us-east-1"
-}
+
+In another terminal, navigate, again, to the location where you cloned this repository:
+
+```bash
+# initialize terraform
+terraform init
+# see if terraform can perform it's duties
+terraform plan
+terraform apply
+# terraform will ask if you are sure. Type `yes`
 ```
 
-- Go to the console, `cd` to `/path/where/you/cloned/this/repo/0000-setup`
-- Run `terraform init`
-- Run `terraform apply`
-- Terraform will ask if you are sure. Type `yes`
-- Go to https://console.aws.amazon.com/ec2/v2/home and you should see `Running Instances` `1`
-- Go back to your console, and run `terraform destroy` — Again, at the prompt, type `yes`
-- Go back to https://console.aws.amazon.com/ec2/v2/home and you should see `Running Instances` `0`
+If all that works, you are golden.
+Go back to the first terminal
+
+```bash
+# Use `Ctrl-c` to stop compose
+# Clean up afterwards
+docker compose down -v
+```
