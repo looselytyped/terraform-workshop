@@ -22,3 +22,8 @@ override.tf.json
 
 # Ignore secrets files
 terraform.tfvars
+
+# Ignore lock files
+.terraform.lock.hcl
+
+volume/
