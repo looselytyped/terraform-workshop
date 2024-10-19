@@ -23,3 +23,12 @@ provider "aws" {
 # Be sure to tag it with:
 # - "Name" to "exercise_0010"
 # - "Terraform" to true
+resource "aws_instance" "exercise_0010" {
+  ami           = "ami-edbfe74c41f8"
+  instance_type = "t2.micro"
+
+  tags = {
+    Name      = "exercise_0010"
+    Terraform = true
+  }
+}
