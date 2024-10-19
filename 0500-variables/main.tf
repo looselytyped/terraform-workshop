@@ -26,6 +26,15 @@ data "aws_ami" "latest_ubuntu" {
 #
 # Add a THIRD tag called `env` that uses the value of the `tier` variable, uppercased!
 # See https://developer.hashicorp.com/terraform/language/functions/upper
+resource "aws_instance" "exercise_0050" {
+  ami           = data.aws_ami.latest_ubuntu.id
+  instance_type = "t2.micro"
 
+  tags = {
+    Name      = "${upper(var.tier)}-example"
+    Terraform = true
+    env       = var.tier
+  }
+}
 
 # There is a TODO for you in the output.tf
